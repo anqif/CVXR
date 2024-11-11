@@ -49,7 +49,7 @@
 #' @name Variable-class
 #' @aliases Variable
 #' @rdname Variable-class
-.Variable <- setClass("Variable", representation(dim = "NumORNULL", name = "character", variable_with_attributes = "ANY", delta = "numeric", gradient = "numeric", .is_vector = "logical"),
+.Variable <- setClass("Variable", representation(dim = "NumORNULL", name = "character", variable_with_attributes = "ANY", delta = "numeric", gradient = "numeric", .is_vector = "logical", var_id = "integer"),
                                   prototype(dim = NULL, name = NA_character_, variable_with_attributes = NULL, delta = NA_real_, gradient = NA_real_, .is_vector = NA),
                                   validity = function(object) {
                                     ## if(!is.null(object@variable_with_attributes))
@@ -80,9 +80,9 @@
 #' variables(y)
 #' canonicalize(y)
 #' @export
-Variable <- function(rows = 1, cols = 1, name = NA_character_, var_id = NA_integer_, ...) { .Variable(dim = c(rows, cols), name = name, id = var_id, ...) }
+Variable <- function(rows = 1, cols = 1, name = NA_character_, var_id = NA_integer_, ...) { .Variable(dim = c(rows, cols), name = name, var_id = var_id, ...) }
 
-setMethod("initialize", "Variable", function(.Object, ..., dim = NULL, name = NA_character_, value = NA_real_, variable_with_attributes = NULL, delta = NA_real_, gradient = NA_real_, .is_vector = NA) {
+setMethod("initialize", "Variable", function(.Object, ..., dim = NULL, name = NA_character_, var_id = NA_integer_, value = NA_real_, variable_with_attributes = NULL, delta = NA_real_, gradient = NA_real_, .is_vector = NA) {
   if(length(dim) == 0 || is.null(dim)) {  # Force constants to default to c(1,1).
     dim <- c(1,1)
     .Object@.is_vector <- TRUE

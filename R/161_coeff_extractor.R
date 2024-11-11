@@ -12,7 +12,6 @@
 CoeffExtractor <- function(inverse_data, canon_backend = NA_character_) { .CoeffExtractor(inverse_data = inverse_data, canon_backend = canon_backend) }
 
 setMethod("initialize", "CoeffExtractor", function(.Object, inverse_data, canon_backend = NA_character_) {
-  browser()
   .Object@inverse_data <- inverse_data
   .Object@canon_backend <- canon_backend
   .Object@id_map <- inverse_data@var_offsets
@@ -57,7 +56,6 @@ setMethod("affine", signature(object = "CoeffExtractor", expr = "Expression"), f
 
 setMethod("extract_quadratic_coeffs", "CoeffExtractor", function(object, affine_expr, quad_forms) {
   # Assumes quadratic forms all have variable arguments. Affine expressions can be anything.
-  browser()
   if(!is_dpp(affine_expr))
     stop("affine_expr must be DPP")
 
@@ -159,7 +157,7 @@ setMethod("coeff_quad_form", signature(object = "CoeffExtractor", expr = "Expres
   # Extract quadratic, linear constant parts of a quadratic objective.
   # Insert no-op such that root is never a quadratic form, for easier processing.
   root <- lo.LinOp(lo.NO_OP, dim(expr), list(expr), list())
-
+  browser()
   # Replace quadratic forms with dummy variables.
   tmp <- replace_quad_forms(root, list())
   root <- tmp[[1]]

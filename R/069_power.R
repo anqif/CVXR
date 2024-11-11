@@ -211,7 +211,7 @@ setMethod(".domain", "Power", function(object) {
 })
 
 #' @describeIn Power A list containing the output of \code{pow_low, pow_mid}, or \code{pow_high} depending on the input power.
-setMethod("get_data", "Power", function(object) { list(object@p, object@w) })
+setMethod("get_data", "Power", function(object) { list(p = object@p, w = object@w, approx_error = object@approx_error,  max_denom = object@max_denom) })
 
 #' @param args A list of arguments to reconstruct the atom. If args=NULL, use the current args of the atom
 #' @param id_objects Currently unused.
@@ -219,12 +219,9 @@ setMethod("get_data", "Power", function(object) { list(object@p, object@w) })
 setMethod("copy", "Power", function(object, args = NULL, id_objects = list()) {
   if(is.null(args))
     args <- object@args
+  names(args) <- "x"
   data <- get_data(object)
-  copy <- do.call(class(object), args)
-  copy@p <- data[[1]]
-  copy@w <- data[[2]]
-  copy@approx_error <- object@approx_error
-  copy
+  do.call(.Power, c(args, data))
 })
 
 #' @describeIn Power Returns the expression in string form.

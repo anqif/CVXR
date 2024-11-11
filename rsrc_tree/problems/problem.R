@@ -499,25 +499,26 @@ setMethod("psolve", "Problem", function(object, solver = NA_character_, ignore_d
     parms_ <- parameters(object)
     n_parameters <- ifelse(length(parms_) > 0, sum(sapply(parms_, function(p) { prod(dim(p)) })), 0)
 
-    cli::cli_text("Your problem has {n_variables} variable{?s}, {length(object@constraints)} constraint{?s} and {n_parameters} parameter{?s}")
-
-    curvatures <- c()
-    if(is_dcp(object))
-      curvatures <- c(curvatures, "DCP")
-    if(is_dgp(object))
-      curvatures <- c(curvatures, "DGP")
-    if(is_dqcp(object))
-      curvatures <- c(curvatures, "DQCP")
-    prob_info <- "It is compliant with {curvatures} grammars"
-
-    if(n_parameters == 0)
-      prob_info <- c(prob_info,
-                     "If you need to solve this problem multiple times, but with different data, consider using parameters"
-                     )
-    prob_info <- c(prob_info,
-                   "CVXR will first compile your problem, then invoke a numerical solver to obtain a solution"
-                   )
-    cli::cli_ul(prob_info)
+    cli::cli_bullets(
+      c("i" = "Your problem has {n_variables} variable{?s}, {length(object@constraints)} constraint{?s} and {n_parameters} parameter{?s}",
+        "v" = {
+          curvatures <- c()
+          if(is_dcp(object))
+            curvatures <- c(curvatures, "DCP")
+          if(is_dgp(object))
+            curvatures <- c(curvatures, "DGP")
+          if(is_dqcp(object))
+            curvatures <- c(curvatures, "DQCP")
+          "It is compliant with {curvatures} grammars"
+        }, 
+        if (n_parameters == 0) {
+          c("i" = "If you need to solve this problem multiple times, but with different data, consider using parameters")
+        } else {
+          NULL
+        },
+        "i" = "CVXR will first compile your problem, then invoke a numerical solver to obtain a solution"
+        )
+    )
   }
 
   if(requires_grad) {
